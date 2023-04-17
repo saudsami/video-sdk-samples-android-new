@@ -1,5 +1,6 @@
 package com.example.quickstart_base;
 
+import com.example.agora.AgoraManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -9,11 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    private AgoraManager agoraManager;
+    protected AgoraManager agoraManager;
     // Fill the App ID of your project generated on Agora Console.
-    private final String appId = "9d2498880e934632b38b0a68fa2f1622"; //""<Your app Id>";
+    protected final String appId = "9d2498880e934632b38b0a68fa2f1622"; //""<Your app Id>";
     // Fill the temp token generated on Agora Console.
-    private String channelName = "demo", token = "007eJxTYOCY0F1Un9O3TnBJRX1f/seLVv/0i+I41+2JsOQ5ofPtQ6ICg2WKkYmlhYWFQaqlsYmZsVGSsUWSQaKZRVqiUZqhmZFRqolNSkMgI0P8PzZmRgYIBPFZGFJSc/MZGAALwR3m"; //""<your access token>";
+    protected String channelName = "demo", token = "007eJxTYOCY0F1Un9O3TnBJRX1f/seLVv/0i+I41+2JsOQ5ofPtQ6ICg2WKkYmlhYWFQaqlsYmZsVGSsUWSQaKZRVqiUZqhmZFRqolNSkMgI0P8PzZmRgYIBPFZGFJSc/MZGAALwR3m"; //""<your access token>";
     FrameLayout flLocalVideo, flRemoteVideo;
 
     @Override
