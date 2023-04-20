@@ -3,16 +3,33 @@ package com.example.call_quality;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.agora_helper.AgoraManager;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private AgoraManagerCallQuality agoraManager;
     private final String appId = "9d2498880e934632b38b0a68fa2f1622"; //""<Your app Id>";
     private String channelName = "demo"; // "<your channel name>";
-    private String token = "007eJxTYNAQPnfxjYnN/EVcTN81k6s+/XtbZ7V2cm93c//h7INhZ84pMFimGJlYWlhYGKRaGpuYGRslGVskGSSaWaQlGqUZmhkZ8Zx3SGkIZGTQnOjHzMgAgSA+C0NKam4+AwMAii8fhg=="; //""<your access token>";
+    private final String token = "007eJxTYNAQPnfxjYnN/EVcTN81k6s+/XtbZ7V2cm93c//h7INhZ84pMFimGJlYWlhYGKRaGpuYGRslGVskGSSaWaQlGqUZmhkZ8Zx3SGkIZGTQnOjHzMgAgSA+C0NKam4+AwMAii8fhg=="; //""<your access token>";
+
+    private TextView networkStatus; // For updating the network status
+    private boolean isEchoTestRunning = false; // Keeps track of the echo test
+    private Button echoTestButton;
+
+    private void updateNetworkStatus(int quality) {
+        if (quality > 0 && quality < 3) networkStatus.setBackgroundColor(Color.GREEN);
+        else if (quality <= 4) networkStatus.setBackgroundColor(Color.YELLOW);
+        else if (quality <= 6) networkStatus.setBackgroundColor(Color.RED);
+        else networkStatus.setBackgroundColor(Color.WHITE);
+    }
+
+    public void setStreamQuality(View view) {
+        agoraManager.switchStreamQuality();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +41,29 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.local_video_view_container),
                 findViewById(R.id.remote_video_view_container)
         );
-        agoraManager.setListener(new AgoraManager.AgoraManagerListener() {
+        agoraManager.setListener(new AgoraManagerCallQuality.AgoraManagerCallQualityListener() {
             @Override
             public void onMessageReceived(String message) {
-                runOnUiThread(() ->
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show());
+                showMessage(message);
+            }
+
+            @Override
+            public void onNetworkQuality(int uid, int txQuality, int rxQuality) {
+                // Use down-link network quality to update the network status
+                runOnUiThread(() -> updateNetworkStatus(rxQuality));
+            }
+
+            @Override
+            public void onLastMileQuality(int quality) {
+                runOnUiThread(() -> updateNetworkStatus(quality));
             }
         });
+
+        // Start the probe test
+        agoraManager.startProbeTest();
+
+        networkStatus = findViewById(R.id.networkStatus);
+        echoTestButton = findViewById(R.id.echoTestButton);
     }
 
     public void joinLeave(View view) {
@@ -45,9 +78,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void echoTest(View view) {
+        if (!isEchoTestRunning) {
+            echoTestButton.setText("Stop Echo Test");
+            agoraManager.startEchoTest(token);
+            isEchoTestRunning = true;
+        } else {
+            agoraManager.stopEchoTest();
+            echoTestButton.setText("Start Echo Test");
+            isEchoTestRunning = false;
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         agoraManager.destroy();
+    }
+
+    private void showMessage(String message) {
+        runOnUiThread(() ->
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show());
     }
 }

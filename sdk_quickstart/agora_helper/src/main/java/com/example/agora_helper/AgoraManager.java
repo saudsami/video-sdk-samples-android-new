@@ -94,7 +94,7 @@ public class AgoraManager {
             RtcEngineConfig config = new RtcEngineConfig();
             config.mContext = mContext;
             config.mAppId = appId;
-            config.mEventHandler = mRtcEventHandler;
+            config.mEventHandler = getIRtcEngineEventHandler();
             agoraEngine = RtcEngine.create(config);
             // By default, the video module is disabled, call enableVideo to enable it.
             agoraEngine.enableVideo();
@@ -153,30 +153,35 @@ public class AgoraManager {
         agoraEngine = null;
     }
 
-    protected final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
-        @Override
-        // Listen for the remote host joining the channel to get the uid of the host.
-        public void onUserJoined(int uid, int elapsed) {
-            sendMessage("Remote user joined " + uid);
-            remoteUid = uid;
+    protected IRtcEngineEventHandler getIRtcEngineEventHandler() {
 
-            // Set the remote video view
-            setupRemoteVideo();
-        }
+        return new IRtcEngineEventHandler() {
+            @Override
+            // Listen for the remote host joining the channel to get the uid of the host.
+            public void onUserJoined(int uid, int elapsed) {
+                sendMessage("Remote user joined " + uid);
+                remoteUid = uid;
 
-        @Override
-        public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-            joined = true;
-            sendMessage("Joined Channel " + channel);
-            localUid = uid;
-        }
+                // Set the remote video view
+                setupRemoteVideo();
+            }
 
-        @Override
-        public void onUserOffline(int uid, int reason) {
-            sendMessage("Remote user offline " + uid + " " + reason);
-            activity.runOnUiThread(() -> remoteSurfaceView.setVisibility(View.GONE));
-        }
-    };
+            @Override
+            public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+                joined = true;
+                sendMessage("Joined Channel " + channel);
+                localUid = uid;
+            }
+
+            @Override
+            public void onUserOffline(int uid, int reason) {
+                sendMessage("Remote user offline " + uid + " " + reason);
+                activity.runOnUiThread(() -> remoteSurfaceView.setVisibility(View.GONE));
+            }
+        };
+    }
+
+
 
     protected boolean checkSelfPermission() {
         return ContextCompat.checkSelfPermission(mContext, REQUESTED_PERMISSIONS[0]) == PackageManager.PERMISSION_GRANTED &&

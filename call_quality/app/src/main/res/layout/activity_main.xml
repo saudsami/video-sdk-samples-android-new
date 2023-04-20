@@ -38,6 +38,14 @@
             android:text="Network Status: "
             />
 
+        <TextView
+            android:id="@+id/networkStatus"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/remote_video_view_container"
+            android:layout_alignRight="@id/remote_video_view_container"
+            />
+
         <Button
             android:id="@+id/btnJoinLeave"
             android:layout_width="wrap_content"
@@ -50,22 +58,13 @@
             android:text="Join" />
 
         <Button
-            android:id="@+id/AudioMixingButton"
-            android:layout_width="match_parent"
+            android:id="@+id/echoTestButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnJoinLeave"
-            android:layout_alignEnd="@+id/btnJoinLeave"
+            android:layout_below="@+id/btnJoinLeave"
             android:layout_alignStart="@id/btnJoinLeave"
-            android:text="Start Audio Mixing"
-            android:onClick="audioMixing"
-            />
+            android:onClick="echoTest"
+            android:text="Start Echo Test" />
 
-        <TextView
-            android:id="@+id/networkStatus"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_below="@id/remote_video_view_container"
-            android:layout_alignRight="@id/remote_video_view_container"
-            />
     </RelativeLayout>
 </ScrollView>
