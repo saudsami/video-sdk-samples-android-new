@@ -1,4 +1,4 @@
-package com.example.agora;
+package com.example.agora_demo;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
