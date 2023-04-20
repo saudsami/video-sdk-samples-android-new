@@ -17,6 +17,7 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.ChannelMediaOptions;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 public class AgoraManager {
 
@@ -81,7 +82,9 @@ public class AgoraManager {
             remoteSurfaceView = new SurfaceView(mContext);
             remoteSurfaceView.setZOrderMediaOverlay(true);
             remoteFrameLayout.addView(remoteSurfaceView);
-            agoraEngine.setupRemoteVideo(new VideoCanvas(remoteSurfaceView, VideoCanvas.RENDER_MODE_FIT, remoteUid));
+            VideoCanvas videoCanvas = new VideoCanvas(remoteSurfaceView, VideoCanvas.RENDER_MODE_FIT,
+                    Constants.VIDEO_MIRROR_MODE_ENABLED, remoteUid);
+            agoraEngine.setupRemoteVideo(videoCanvas);
             // Display RemoteSurfaceView.
             remoteSurfaceView.setVisibility(View.VISIBLE);
         });
