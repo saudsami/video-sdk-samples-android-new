@@ -1,4 +1,4 @@
-package com.example.agora_demo;
+package com.example.agora_helper;
 
 import org.junit.Test;
 

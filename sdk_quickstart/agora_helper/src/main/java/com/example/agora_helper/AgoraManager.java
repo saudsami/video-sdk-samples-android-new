@@ -1,4 +1,4 @@
-package com.example.agora_demo;
+package com.example.agora_helper;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -17,7 +17,6 @@ import io.agora.rtc2.RtcEngine;
 import io.agora.rtc2.RtcEngineConfig;
 import io.agora.rtc2.video.VideoCanvas;
 import io.agora.rtc2.ChannelMediaOptions;
-import io.agora.rtc2.video.VideoEncoderConfiguration;
 
 public class AgoraManager {
 

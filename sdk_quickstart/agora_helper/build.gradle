@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.agora_demo'
+    namespace 'com.example.agora_helper'
     compileSdk 33
 
     defaultConfig {
